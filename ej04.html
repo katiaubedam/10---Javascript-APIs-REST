@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <select id="selectPlanetas" onchange="verHabitantes(event)">
+        <option value="0" selected="selected">Elige un planeta</option>
+    </select>
+
+    <div id="container">
+
+    </div>
+
+    <script>
+
+        fetch(`https://rickandmortyapi.com/api/location`)
+            .then(
+                (respuesta) => respuesta.json()
+            ).then (
+                datos => {
+            
+                    let contenido = ""
+                    
+                    for (let i = 0; i < datos.results.length; i++) {
+                        
+                        if(datos.results[i].type === 'Planet'){
+                            contenido += `<option value = "${datos.results[i].id}">${datos.results[i].name}</option>`
+                        }
+            
+                    }
+
+                document.getElementById('selectPlanetas').innerHTML += contenido
+                })
+
+        function verHabitantes(event) {
+
+            if (event.target.value !== 0){
+                fetch(`https://rickandmortyapi.com/api/location/${event.target.value}`)
+                .then(
+                    respuesta => respuesta.json()
+                ).then(datos => {
+                    
+                    Promise.all(datos.residents.map(url =>fetch(url)))
+                        .then (
+                            jsonRecibidos =>
+                            Promise.all(jsonRecibidos.map(jsonRecibido => jsonRecibido.json())) 
+                        ).then (
+                            datos2 => {
+                                let lista = ""
+                                datos2.forEach(
+                                    (objeto) => {
+                                        lista += `<li>${objeto.name}</li>`
+                                    }
+                                )
+                                document.getElementById('container').innerHTML = `<ul>${lista}</ul>`
+
+                            }) 
+                    })
+            }
+        }
+    </script>
+</body>
+</html>

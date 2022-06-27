@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        #container {
+            display: flex;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            font-family: sans-serif;
+        }
+
+        .card {
+            min-width: 300px;
+            max-width: 300px;
+            margin: 20px;
+            padding: 15px;
+            border: 1px solid #888;
+            border-radius: 10px;
+            box-shadow: 10px 10px 8px #888;
+        }
+    </style>
+
+    <div id="container">
+
+    </div>
+
+    <script>
+        fetch("https://gutendex.com/books")
+            .then(
+                (respuesta) => respuesta.json()
+            ).then(
+                (datos) => {
+                    let libros = datos.results
+                    
+                    for (const i in libros) {
+                        let contenido = `<h2>${libros[i].title}</h2>
+                            <img src='${libros[i].formats["image/jpeg"]}' alt="${libros[i].title}">
+                            <p>Autor: ${libros[i].authors[0].name}</p>`
+
+                        let card = document.createElement('div')
+                        card.setAttribute('class', 'card')
+                        card.innerHTML = contenido
+                        document.getElementById("container").appendChild(card)
+                    }
+                } 
+            )
+    </script>
+</body>
+</html>

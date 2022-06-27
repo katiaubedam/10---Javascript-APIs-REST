@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        #container {
+            display: flex;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            font-family: sans-serif;
+        }
+
+        .card {
+            min-width: 300px;
+            max-width: 300px;
+            margin: 20px;
+            padding: 15px;
+            border: 1px solid #888;
+            border-radius: 10px;
+            box-shadow: 10px 10px 8px #888;
+        }
+
+        #header {
+            display: flex;
+            justify-content: center;
+        }
+
+        input, button {
+            display: block;
+            margin: 10px;
+        }
+    </style>
+    <div id="header">
+        <input id="inputID" type="text" placeholder="Introduce el num de commic xkcd">
+        <button id="buttonObtain" type="button" onclick="obtener()">Obtener</button>
+    </div>
+
+    <div id="container">
+
+    </div>
+
+    <script>
+
+        function obtener() {
+            let id = document.getElementById("inputID").value
+
+            fetch(`https://xkcd.com/${id}/info.0.json`)
+                .then(
+                    (respuesta) => respuesta.json()
+                ).then(
+                    (datos) => {
+                        let comic = datos
+                        
+                        console.log(comic)
+
+                        // Como ya se vio en clase, no obtiene respuesta debido a la política CORS
+                        
+                        /*let card = document.createElement('div')
+                        card.setAttribute('class', 'card')
+                        card.innerHTML = contenido
+                        document.getElementById("container").appendChild(card)*/
+
+                    } 
+                )
+        }
+    </script>
+</body>
+</html>
